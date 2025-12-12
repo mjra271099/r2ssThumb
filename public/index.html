@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Frame Capture Tools</title>
+</head>
+<body>
+    <h2>Paste List Video (.mp4)</h2>
+
+    <textarea id="list" style="width:100%;height:200px"></textarea><br><br>
+    <button onclick="processVideos()">Start Capture</button>
+
+    <pre id="output"></pre>
+
+    <script>
+    async function processVideos() {
+        const text = document.getElementById("list").value.trim();
+        const links = text.split("\n").filter(x => x.trim() !== "");
+
+        const res = await fetch("/process", {
+            method: "POST",
+            headers: {"Content-Type":"application/json"},
+            body: JSON.stringify({ links })
+        });
+
+        const data = await res.json();
+        document.getElementById("output").textContent = JSON.stringify(data, null, 2);
+    }
+    </script>
+</body>
+</html>
