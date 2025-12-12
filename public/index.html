@@ -28,7 +28,7 @@
                 `Processing ${i+1}/${links.length}: ${url} ...`;
 
             try {
-                const res = await fetch("https://r2ss-thumb.vercel.app/capture", {
+                const res = await fetch("https://r2ss-thumb.vercel.app/api/capture, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ url, id })
