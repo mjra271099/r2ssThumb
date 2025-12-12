@@ -16,14 +16,33 @@
         const text = document.getElementById("list").value.trim();
         const links = text.split("\n").filter(x => x.trim() !== "");
 
-        const res = await fetch("/process", {
-            method: "POST",
-            headers: {"Content-Type":"application/json"},
-            body: JSON.stringify({ links })
-        });
+        const results = [];
 
-        const data = await res.json();
-        document.getElementById("output").textContent = JSON.stringify(data, null, 2);
+        for (let i = 0; i < links.length; i++) {
+            const url = links[i].trim();
+
+            // ambil ID dari nama file
+            const id = url.split("/").pop().replace(".mp4", "");
+
+            document.getElementById("output").textContent =
+                `Processing ${i+1}/${links.length}: ${url} ...`;
+
+            try {
+                const res = await fetch("/capture", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ url, id })
+                });
+
+                const data = await res.json();
+                results.push(data);
+            } catch (err) {
+                results.push({ url, error: err.message });
+            }
+        }
+
+        document.getElementById("output").textContent =
+            JSON.stringify(results, null, 2);
     }
     </script>
 </body>
